@@ -1,206 +1,112 @@
-# Document Analyst - Persona Driven Intelligence
+# PDF Analyzer - Persona-Driven Document Intelligence
 
-An intelligent document analysis system that uses AI to extract and rank the most relevant information from PDF documents based on specific personas and tasks.
+## 🎯 Overview
 
-## 🚀 Features
+This PDF analyzer extracts and analyzes relevant content from multiple PDF documents based on a specified persona and task. It uses advanced semantic analysis to identify and prioritize the most relevant information for your specific needs.
 
-- **PDF Text Extraction**: Supports both Table of Contents (TOC) based and page-by-page extraction
-- **Intelligent Section Titles**: Automatically extracts meaningful section titles from content
-- **Semantic Analysis**: Uses sentence transformers to rank content by relevance
-- **Persona-Based Analysis**: Tailors analysis based on specific roles and tasks
-- **Offline Operation**: Runs completely offline once models are downloaded
-- **JSON Output**: Structured output with metadata, ranked sections, and refined analysis
+## 🏗️ Core Components
 
-## 📋 Prerequisites
+### Essential Files
+- `analyzer.py` - Main PDF analyzer with document diversity and semantic analysis
+- `pdf_processor.py` - PDF text extraction and section processing
+- `main.py` - Main execution script
+- `download_model.py` - Model download utility for offline operation
+- `requirements.txt` - Python dependencies
 
-- Python 3.8 or higher
-- Internet connection (for initial model download only)
+### Key Directories
+- `documents/` - Place your PDF files here
+- `models/` - Local sentence transformer model for offline operation
+- `output/` - Generated analysis results
+- `venv/` - Python virtual environment
 
-## 🛠️ Setup Instructions
+## 🚀 Key Features
 
-### 1. Clone the Repository
+### Intelligent PDF Analysis
+- **Document Diversity**: Ensures content is extracted from multiple PDF sources
+- **Semantic Ranking**: Uses sentence transformers for intelligent content prioritization
+- **Context-Aware Processing**: Adapts analysis based on persona and task requirements
+- **Offline Operation**: Works without internet connection using local AI models
 
-```bash
-git clone <your-repo-url>
-cd "Persona Driven Intelligence/document_analyst"
-```
+### Customizable Analysis
+- **Flexible Input**: Supports any number of PDF documents
+- **Persona-Driven**: Tailors analysis to specific roles (e.g., Travel Planner, Student, etc.)
+- **Task-Specific**: Focuses on relevant content for your specific job to be done
+- **Rich Output**: Provides structured JSON with extracted sections and refined content
 
-### 2. Create Virtual Environment
+## 🛠️ Usage
 
-#### On macOS/Linux:
-```bash
-# Create virtual environment
-python3 -m venv venv
+### Setup
+1. Place your PDF files in the `documents/` folder
+2. Update the JSON data in `main.py` with your PDF filenames, persona, and task
+3. Run the analyzer
 
-# Activate virtual environment
-source venv/bin/activate
-```
-
-#### On Windows:
-```bash
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-venv\Scripts\activate
-```
-
-### 3. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Download AI Model (One-time setup)
-
-**Important**: This step requires internet connection and will download ~191MB of model files.
-
-```bash
-python download_model.py
-```
-
-This will download the sentence transformer model locally to the `models/` directory, enabling offline operation.
-
-### 5. Add Your PDF Documents
-
-Place your PDF files in the `documents/` directory. Update the `main.py` file to reference your specific documents.
-
-## 📖 Usage
-
-### Basic Usage
-
+### Running the Analyzer
 ```bash
 python main.py
 ```
 
-This will:
-1. Load the AI model from local storage
-2. Process all PDF documents specified in `main.py`
-3. Perform semantic analysis based on the defined persona and task
-4. Save results to `output/analysis_result_[timestamp].json`
-
-### Customizing Analysis
-
-Edit `main.py` to customize:
-
-```python
-input_json = {
-    "documents": [
-        {
-            "filename": "your-document.pdf",
-            "title": "Your Document Title"
-        }
-        # Add more documents here
-    ],
-    "persona": {
-        "role": "Your Role Here"  # e.g., "Travel Planner", "Research Analyst"
-    },
-    "job_to_be_done": {
-        "task": "Your specific task"  # e.g., "Plan a 4-day trip"
-    }
-}
-```
-
-## 📁 Project Structure
-
-```
-document_analyst/
-├── analyzer.py              # Main analysis engine
-├── pdf_processor.py         # PDF text extraction
-├── main.py                  # Entry point and configuration
-├── download_model.py        # Model download script
-├── requirements.txt         # Python dependencies
-├── documents/              # Place your PDF files here
-├── output/                 # Analysis results
-├── models/                 # AI models (created after setup)
-└── venv/                   # Virtual environment (created during setup)
-```
-
-## 📊 Output Format
-
-The system generates a JSON file with:
-
-```json
-{
-  "metadata": {
-    "input_documents": ["list of processed files"],
-    "persona": "specified role",
-    "job_to_be_done": "specified task",
-    "processing_timestamp": "ISO timestamp"
-  },
-  "extracted_sections": [
-    {
-      "document": "filename.pdf",
-      "section_title": "Meaningful section title",
-      "importance_rank": 1,
-      "page_number": 5
-    }
-  ],
-  "subsection_analysis": [
-    {
-      "document": "filename.pdf",
-      "refined_text": "Most relevant content extracted...",
-      "page_number": 5
-    }
-  ]
-}
-```
-
-## 🔧 Troubleshooting
-
-### Model Download Issues
+### Download Model (first time setup)
 ```bash
-# If model download fails, try again:
 python download_model.py
 ```
 
-### PDF Processing Issues
-- Ensure PDF files are not password protected
-- Check that PDF files contain readable text (not just images)
-- Verify file paths in `main.py` match your actual file names
+## 📋 Requirements
 
-### Virtual Environment Issues
+- Python 3.8+
+- sentence-transformers
+- torch
+- PyPDF2
+- numpy
+
+Install dependencies:
 ```bash
-# Deactivate and recreate if needed:
-deactivate
-rm -rf venv
-python3 -m venv venv
-source venv/bin/activate  # macOS/Linux
-# or
-venv\Scripts\activate     # Windows
 pip install -r requirements.txt
 ```
 
-## 🤖 How It Works
+## 🎨 How to Customize
 
-1. **PDF Processing**: Extracts text using PyMuPDF, respecting TOC structure when available
-2. **Content Enhancement**: Automatically improves section titles for better organization
-3. **Semantic Analysis**: Uses sentence transformers to understand content meaning
-4. **Relevance Ranking**: Ranks all sections based on similarity to persona/task query
-5. **Content Refinement**: Extracts the most relevant sentences from top sections
-6. **JSON Generation**: Outputs structured results with timestamps and metadata
+### 1. Add Your PDFs
+Place your PDF files in the `documents/` folder.
 
-## 📦 Dependencies
+### 2. Update main.py
+Modify the input JSON in `main.py` to specify:
+- Your PDF filenames
+- Persona (role/perspective for analysis)
+- Job to be done (specific task or goal)
 
-- `PyMuPDF`: PDF text extraction
-- `sentence-transformers`: AI-powered semantic analysis
-- `torch`: Deep learning framework
-- `numpy`: Numerical computations
+Example:
+```python
+input_json = {
+    "documents": [
+        {"filename": "report1.pdf", "title": "Financial Report"},
+        {"filename": "report2.pdf", "title": "Market Analysis"}
+    ],
+    "persona": {"role": "Financial Analyst"},
+    "job_to_be_done": {"task": "Identify key investment opportunities"}
+}
+```
 
-## 🔒 Privacy & Offline Operation
+### 3. Run Analysis
+Execute `python main.py` to generate your analysis results in the `output/` folder.
 
-- **Fully Offline**: After initial setup, no internet connection required
-- **Local Processing**: All analysis happens on your machine
-- **No Data Sharing**: Your documents never leave your computer
+## 📝 Output Structure
 
-## 📄 License
+The analyzer generates structured JSON output containing:
+- **Metadata**: Input documents, persona, task, and timestamp
+- **Extracted Sections**: Top-ranked sections with importance rankings
+- **Subsection Analysis**: Refined content with key insights from each document
 
-This project is provided as-is for educational and research purposes.
+## 🎯 Technical Implementation
 
-## 🤝 Contributing
+### Advanced Features
+- Document diversity algorithm ensures multi-source content extraction
+- Enhanced semantic queries improve relevance scoring
+- Improved section title extraction from PDF content
+- Balanced ranking considering relevance, content quality, and diversity
 
-Feel free to submit issues, feature requests, or pull requests to improve the system.
+### AI Model
+- Uses sentence-transformers (all-MiniLM-L6-v2) for semantic understanding
+- Local model caching for offline operation
+- Efficient similarity calculations for content ranking
 
----
-
-**Note**: The `models/` and `venv/` directories are excluded from version control due to their large size. Follow the setup instructions to create them locally.
+This PDF analyzer provides an intelligent way to extract and analyze relevant information from your documents based on your specific needs and perspective.
