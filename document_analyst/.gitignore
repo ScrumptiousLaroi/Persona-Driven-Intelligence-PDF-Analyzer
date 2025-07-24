@@ -1,5 +1,7 @@
-# Models directory (large files, download locally)
+# Models directory (large files, download locally using download_model.py)
 models/
+*.bin
+*.safetensors
 
 # Python cache
 __pycache__/
