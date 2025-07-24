@@ -9,6 +9,39 @@ from typing import List, Dict, Any
 # Import the PDF processing function from our other file
 from pdf_processor import extract_sections_from_pdf
 
+def check_model_availability(model_name: str = 'all-MiniLM-L6-v2') -> bool:
+    """
+    Check if the model is available locally in the project directory.
+    
+    Args:
+        model_name: Name of the sentence transformer model
+        
+    Returns:
+        bool: True if model is available locally, False otherwise
+    """
+    try:
+        # Get the local model path
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        models_dir = os.path.join(current_dir, "models")
+        local_model_path = os.path.join(models_dir, model_name)
+        
+        # Check if the model directory exists and has required files
+        if not os.path.exists(local_model_path):
+            return False
+            
+        # Check for essential model files
+        required_files = ['config.json', 'pytorch_model.bin', 'tokenizer.json']
+        model_files = os.listdir(local_model_path)
+        
+        # Check if at least some model files exist (different models may have different file structures)
+        has_config = any('config' in f for f in model_files)
+        has_model = any('pytorch_model' in f or 'model' in f for f in model_files)
+        
+        return has_config and has_model
+        
+    except Exception:
+        return False
+
 def extract_section_title_from_content(content: str, page_num: int) -> str:
     """
     Extract a meaningful section title from content when TOC is not available.
@@ -108,7 +141,28 @@ def run_analysis(input_data):
     """
     # --- Phase 1: Initialization and Setup ---
     print("Phase 1: Initializing and loading model...")
-    model = SentenceTransformer('all-MiniLM-L6-v2')
+    
+    model_name = 'all-MiniLM-L6-v2'
+    
+    # Check if model is available locally first
+    if not check_model_availability(model_name):
+        print(f"⚠️  Model '{model_name}' not found locally.")
+        print("Please run 'python download_model.py' first with internet connection.")
+        print("This will download and cache the model in the project directory for offline usage.")
+        return {}
+    
+    try:
+        # Load the model from local directory
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        models_dir = os.path.join(current_dir, "models")
+        local_model_path = os.path.join(models_dir, model_name)
+        
+        model = SentenceTransformer(local_model_path)
+        print(f"✅ Model '{model_name}' loaded from local directory: {local_model_path}")
+    except Exception as e:
+        print(f"❌ Error loading model: {e}")
+        print("Please run 'python download_model.py' to re-download the model.")
+        return {}
 
     persona = input_data["persona"]["role"]
     job_to_be_done = input_data["job_to_be_done"]["task"]
